@@ -21,11 +21,11 @@ public class Partita {
     public void rimescolaMazzoSeNecessario(ArrayList<Carta> scartini){
         if (mazzo.carteRimaste() == 0) mazzo.RifaiMazzo(scartini);
     }
-
+    private int giocatoriNum;
     public Partita() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Scegli quanti giocatori utilizzare (4 : 7):");
-        int giocatoriNum = sc.nextInt();
+        giocatoriNum = sc.nextInt();
         switch (giocatoriNum) {
             case 4:
                 giocatori.add(rinnegato);
@@ -274,19 +274,24 @@ public class Partita {
 
     private boolean controllaVittoria() {
         boolean sceriffoVivo = sceriffo.getPuntiFerita() > 0;
-        boolean tuttiBanditiMorti = bandito1.getPuntiFerita() <= 0 &&
-                bandito2.getPuntiFerita() <= 0 &&
-                bandito3.getPuntiFerita() <= 0;
+        boolean tuttiBanditiMorti = false;
+        if (giocatoriNum == 4 || giocatoriNum == 5) tuttiBanditiMorti = bandito1.getPuntiFerita() <= 0 && bandito2.getPuntiFerita() <= 0;
+        else if (giocatoriNum == 6 || giocatoriNum == 7) {
+            tuttiBanditiMorti = bandito1.getPuntiFerita() <= 0 &&
+                    bandito2.getPuntiFerita() <= 0 &&
+                    bandito3.getPuntiFerita() <= 0;
+        }
         boolean protagmorto = rinnegato.getPuntiFerita() <= 0;
 
         if (!sceriffoVivo && protagmorto) {
             System.out.println("I banditi vincono!");
             return false;
-        } else if (!sceriffoVivo && (tuttiBanditiMorti) {
+        } else if (!sceriffoVivo && (tuttiBanditiMorti)) {
             System.out.println("Il rinnegato vince!!");
             return false;
         } else if (sceriffoVivo && tuttiBanditiMorti) {
             System.out.println("Sceriffo e vice vincono!");
+            return false;
         }
         return true;
     }
